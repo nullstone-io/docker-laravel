@@ -4,17 +4,14 @@ RUN apk --update add nginx supervisor composer php8-fpm
 
 COPY etc/ /etc/
 
-# Configure php-fpm
-RUN mkdir -p /run/php/
-RUN touch /run/php/php-fpm.pid
-RUN touch /run/php/php-fpm.sock
-
-# Configure nginx
-RUN mkdir -p /run/nginx/
-RUN touch /run/nginx/nginx.pid
+# Copy in entrypoints
+COPY entrypoints/ /entrypoints/
+RUN chmod +x /entrypoints/*.sh
 
 # Configure Laravel
 ONBUILD WORKDIR /app
+ONBUILD COPY . .
 ONBUILD ENV LOG_CHANNEL=stderr
 
+EXPOSE 80
 CMD supervisord -c /etc/supervisord.conf
