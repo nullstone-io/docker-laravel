@@ -17,4 +17,4 @@ RUN touch /run/nginx/nginx.pid
 ONBUILD WORKDIR /app
 ONBUILD ENV LOG_CHANNEL=stderr
 
-CMD supervisord -c /etc/supervisor.d/supervisord.ini
+CMD supervisord -c /etc/supervisord.conf
