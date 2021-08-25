@@ -12,7 +12,7 @@ RUN chmod +x /entrypoints/*.sh
 
 # Configure Laravel
 ONBUILD WORKDIR /app
-ONBUILD COPY . .
+ONBUILD COPY --chown=nobody:nobody . .
 ONBUILD ENV LOG_CHANNEL=stderr
 
 EXPOSE 80
