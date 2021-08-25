@@ -1,7 +1,8 @@
 FROM php:8-alpine
 
 RUN apk --update add nginx supervisor composer \
-  php8-fpm php8-session php8-openssl php8-tokenizer
+  php8-fpm php8-session php8-openssl php8-tokenizer \
+  php8-pgsql php-mysqli
 
 COPY etc/ /etc/
 
