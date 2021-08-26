@@ -1,6 +1,6 @@
 FROM php:8-alpine
 
-RUN apk --update add nginx supervisor composer \
+RUN apk --update add composer \
   php8-fpm php8-session php8-openssl php8-tokenizer \
   php8-pgsql php-mysqli
 
@@ -15,5 +15,5 @@ ONBUILD WORKDIR /app
 ONBUILD COPY --chown=nobody:nobody . .
 ONBUILD ENV LOG_CHANNEL=stderr
 
-EXPOSE 80
-CMD supervisord -c /etc/supervisord.conf
+EXPOSE 9000
+CMD php-fpm8
