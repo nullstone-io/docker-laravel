@@ -29,7 +29,7 @@ server {
     fastcgi_index index.php;
     include fastcgi.conf;
 
-    fastcgi_pass ${PHP_ADDR};
+    fastcgi_pass ${WEBAPP_ADDR};
   }
 
   error_page 404 /index.php;

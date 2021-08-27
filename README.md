@@ -32,7 +32,7 @@ services:
     ports:
       - "3000:80"
     environment:
-      - PHP_ADDR=app:9000
+      - WEBAPP_ADDR=app:9000
     depends_on:
       - app
 
