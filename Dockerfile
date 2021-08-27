@@ -17,8 +17,8 @@ RUN chmod +x /docker-entrypoint.d/*.sh
 # Configure Laravel
 ONBUILD WORKDIR /app
 ONBUILD COPY --chown=nobody:nobody . .
+ONBUILD RUN composer install --no-dev
 ONBUILD ENV LOG_CHANNEL=stderr
-ONBUILD ENV PHP_ADDR=localhost:9000
 
 EXPOSE 9000
 CMD php-fpm8
