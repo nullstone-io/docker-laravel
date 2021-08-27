@@ -6,6 +6,7 @@ RUN apk --update add composer \
 
 VOLUME /etc/nginx/conf.d
 VOLUME /etc/nginx/templates
+VOLUME /app/public
 
 COPY etc/ /etc/
 
