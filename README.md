@@ -10,3 +10,50 @@ This image uses  [supervisord](http://supervisord.org/) to manage both processes
 
 The logs from each of these is configured to emit to stdout/stderr.
 
+## Nginx sidecar
+
+This image is configured to easily connect a sidecar container running nginx.
+By doing so, nginx can serve static assets with php requests forwarded to this container.
+
+There are 3 volumes exposed in this image that are shared with the nginx sidecar.
+These volumes automatically configure nginx to serve static assets and php properly.
+
+Here is an example `docker-compose.yml` to configure for local development:
+```
+version: "3.8"
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - app-public:/app/public
+      - nginx-confd:/etc/nginx/conf.d
+      - nginx-templates:/etc/nginx/templates:ro
+    ports:
+      - "3000:80"
+    environment:
+      - PHP_ADDR=app:9000
+    depends_on:
+      - app
+
+  app:
+    build: .
+    entrypoint: /docker-entrypoint.d/local.sh
+    command: php-fpm8
+    volumes:
+      - "vendor:/app/vendor"
+      - ".:/app"
+      - app-public:/app/public
+      - nginx-confd:/etc/nginx/conf.d
+      - nginx-templates:/etc/nginx/templates
+    environment:
+      - APP_ENV=local
+      - APP_KEY=${APP_KEY}
+      - APP_DEBUG=true
+
+volumes:
+  vendor:
+  app-public:
+  nginx-confd:
+  nginx-templates:
+```
