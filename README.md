@@ -57,3 +57,29 @@ volumes:
   nginx-confd:
   nginx-templates:
 ```
+
+## Add redis
+
+Update `docker-compose.yml`.
+```
+services:
+  app:
+    ...
+    environment:
+      ...
+      - CACHE_DRIVER=redis
+      - REDIS_URL=tcp://redis:6379/0
+  ...
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+```
+
+Install redis to `Dockerfile`.
+```dockerfile
+RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
+  && pecl install redis \
+  && rm -rf /tmp/pear \
+  && docker-php-ext-enable redis.so
+```
