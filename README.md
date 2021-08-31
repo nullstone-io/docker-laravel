@@ -3,12 +3,12 @@
 Laravel Base Image that is optimized for production and configured to operate locally the same way.
 This image is very opinionated; however, not restrictive.
 
-## Server
-
-This image uses alpine to run laravel using [nginx](https://www.nginx.com/) and [php-fpm](https://php-fpm.org/).
-This image uses  [supervisord](http://supervisord.org/) to manage both processes.
-
-The logs from each of these is configured to emit to stdout/stderr.
+This image is configured with:
+- Server optimized for [php-fpm](https://php-fpm.org/).
+- When making code changes, no need to rebuild/restart your container.
+- Logs are emitted to stdout/stderr.
+- The resulting image is small (~37mb).
+- Preconfigured to attach [nginx](https://www.nginx.com/) sidecar container. See below.
 
 ## Nginx sidecar
 
@@ -18,49 +18,34 @@ By doing so, nginx can serve static assets with php requests forwarded to this c
 There are 3 volumes exposed in this image that are shared with the nginx sidecar.
 These volumes automatically configure nginx to serve static assets and php properly.
 
-Here is an example `docker-compose.yml` to configure for local development:
-```
-version: "3.8"
+See [example/basic/docker-compose.yml](example/basic/docker-compose.yml) for working example for local development.
 
+## Swap mysql for postgresql
+
+Update `docker-compose.yml`. See full example at [example/postgres/docker-compose.yml](example/postgres/docker-compose.yml).
+```
 services:
-  nginx:
-    image: nginx:stable-alpine
-    volumes:
-      - app-public:/app/public
-      - nginx-confd:/etc/nginx/conf.d
-      - nginx-templates:/etc/nginx/templates:ro
-    ports:
-      - "3000:80"
-    environment:
-      - WEBAPP_ADDR=app:9000
-    depends_on:
-      - app
-
   app:
-    build: .
-    entrypoint: /docker-entrypoint.d/local.sh
-    command: php-fpm8
-    volumes:
-      - "vendor:/app/vendor"
-      - ".:/app"
-      - app-public:/app/public
-      - nginx-confd:/etc/nginx/conf.d
-      - nginx-templates:/etc/nginx/templates
+    ...
     environment:
-      - APP_ENV=local
-      - APP_KEY=${APP_KEY}
-      - APP_DEBUG=true
-
-volumes:
-  vendor:
-  app-public:
-  nginx-confd:
-  nginx-templates:
+      ...
+      - DB_CONNECTION=pgsql
+      - DATABASE_URL=postgres://acme:acme@db:5432/acme
+  ...
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=acme
+      - POSTGRES_PASSWORD=acme
+      - POSTGRES_DB=acme
 ```
+
 
 ## Add redis
 
-Update `docker-compose.yml`.
+Update `docker-compose.yml`. See full example at [example/redis/docker-compose.yml](example/redis/docker-compose.yml).
 ```
 services:
   app:
