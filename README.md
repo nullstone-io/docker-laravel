@@ -18,11 +18,11 @@ By doing so, nginx can serve static assets with php requests forwarded to this c
 There are 3 volumes exposed in this image that are shared with the nginx sidecar.
 These volumes automatically configure nginx to serve static assets and php properly.
 
-See [example/basic/docker-compose.yml](example/basic/docker-compose.yml) for working example for local development.
+See [example/basic/docker-compose.yml](examples/basic/docker-compose.yml) for working example for local development.
 
 ## Swap mysql for postgresql
 
-Update `docker-compose.yml`. See full example at [example/postgres/docker-compose.yml](example/postgres/docker-compose.yml).
+Update `docker-compose.yml`. See full example at [examples/postgres/docker-compose.yml](examples/postgres/docker-compose.yml).
 ```
 services:
   app:
@@ -45,7 +45,7 @@ services:
 
 ## Add redis
 
-Update `docker-compose.yml`. See full example at [example/redis/docker-compose.yml](example/redis/docker-compose.yml).
+Update `docker-compose.yml`. See full example at [examples/redis/docker-compose.yml](examples/redis/docker-compose.yml).
 ```
 services:
   app:
