@@ -18,7 +18,7 @@ By doing so, nginx can serve static assets with php requests forwarded to this c
 There are 3 volumes exposed in this image that are shared with the nginx sidecar.
 These volumes automatically configure nginx to serve static assets and php properly.
 
-See [example/basic/docker-compose.yml](examples/basic/docker-compose.yml) for working example for local development.
+See [examples/basic/docker-compose.yml](examples/basic/docker-compose.yml) for working example for local development.
 
 ## Swap mysql for postgresql
 
