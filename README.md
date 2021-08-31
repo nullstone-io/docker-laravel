@@ -5,6 +5,7 @@ This image is very opinionated; however, not restrictive.
 
 This image is configured with:
 - Server optimized for [php-fpm](https://php-fpm.org/).
+- Static assets and files are automatically added using `ONBUILD` during your docker build process.
 - When making code changes, no need to rebuild/restart your container.
 - Logs are emitted to stdout/stderr.
 - The resulting image is small (~37mb).
