@@ -1,7 +1,7 @@
 FROM php:8-alpine
 
 RUN apk --update add composer \
-  php8-fpm php8-session php8-openssl php8-tokenizer \
+  php8-fpm php8-session php8-openssl php8-tokenizer php8-dom php8-fileinfo \
   php8-pgsql php-mysqli
 
 VOLUME /etc/nginx/conf.d
