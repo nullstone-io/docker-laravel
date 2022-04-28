@@ -24,4 +24,9 @@ if [ -z "${MYSQL_URL}" ]; then
   export DATABASE_URL="${MYSQL_URL}"
 fi
 
+# Set laravel APP_ENV to NULLSTONE_ENV if set
+if [ -z "${NULLSTONE_ENV}" ]; then
+  export APP_ENV="${NULLSTONE_ENV}"
+fi
+
 exec "$@"

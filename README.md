@@ -11,6 +11,13 @@ This image is configured with:
 - The resulting image is small (~37mb).
 - Preconfigured to attach [nginx](https://www.nginx.com/) sidecar container. See below.
 
+## Automatic Env Variables
+
+On boot, this docker image automatically configures several environment variables. 
+1. If `POSTGRES_URL` is set, `DB_CONNECTION=pgsql` and `DATABASE_URL=$POSTGRES_URL`.
+2. If `MYSQL_URL` is set, `DB_CONNECTION=mysql` and `DATABASE_URL=$MYSQL_URL`.
+3. If `NULLSTONE_ENV` is set, `APP_ENV=$NULLSTONE_ENV`.
+
 ## Local Development
 
 When developing locally, it's common to add/update/remove packages to your application.
