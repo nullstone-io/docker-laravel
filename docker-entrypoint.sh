@@ -2,28 +2,26 @@
 
 set -e
 
-if /usr/bin/find "/docker-entrypoint.d/" -mindepth 1 -maxdepth 1 -type f -print -quit 2>/dev/null | read v; then
-    echo >&2 "$0: /docker-entrypoint.d/ is not empty, will attempt to perform configuration"
+# Install packages on boot if set (usually used for local development)
+if [ -z "${INSTALL_PACKAGES_ON_BOOT}" ]; then
+  echo "Installing packages..."
+  composer install --no-dev
+fi
 
-    echo >&2 "$0: Looking for shell scripts in /docker-entrypoint.d/"
-    find "/docker-entrypoint.d/" -follow -type f -print | sort -V | while read -r f; do
-        case "$f" in
-            *.sh)
-                if [ -x "$f" ]; then
-                    echo >&2 "$0: Launching $f";
-                    "$f"
-                else
-                    # warn on shell scripts without exec bit
-                    echo >&2 "$0: Ignoring $f, not executable";
-                fi
-                ;;
-            *) echo >&2 "$0: Ignoring $f";;
-        esac
-    done
+# Configure DATABASE_URL if POSTGRES_URL is set
+if [ -z "${POSTGRES_URL}" ]; then
+  echo "Setting DB_CONNECTION=pgsql"
+  export DB_CONNECTION=pgsql
+  echo "Configuring DATABASE_URL using POSTGRES_URL"
+  export DATABASE_URL="${POSTGRES_URL}"
+fi
 
-    echo >&2 "$0: Configuration complete; ready for start up"
-else
-    echo >&2 "$0: No files found in /docker-entrypoint.d/, skipping configuration"
+# Configure DATABASE_URL if MYSQL_URL is set
+if [ -z "${POSTGRES_URL}" ]; then
+  echo "Setting DB_CONNECTION=mysql"
+  export DB_CONNECTION=mysql
+  echo "Configuring DATABASE_URL using MYSQL_URL"
+  export DATABASE_URL="${MYSQL_URL}"
 fi
 
 exec "$@"
