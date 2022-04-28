@@ -17,7 +17,7 @@ if [ -z "${POSTGRES_URL}" ]; then
 fi
 
 # Configure DATABASE_URL if MYSQL_URL is set
-if [ -z "${POSTGRES_URL}" ]; then
+if [ -z "${MYSQL_URL}" ]; then
   echo "Setting DB_CONNECTION=mysql"
   export DB_CONNECTION=mysql
   echo "Configuring DATABASE_URL using MYSQL_URL"
