@@ -16,7 +16,6 @@ services:
 
   app:
     build: .
-    entrypoint: /docker-entrypoint.d/local.sh
     command: php-fpm8
     volumes:
       - vendor:/app/vendor
@@ -25,6 +24,7 @@ services:
       - nginx-confd:/etc/nginx/conf.d
       - nginx-templates:/etc/nginx/templates
     environment:
+      - INSTALL_PACKAGES_ON_BOOT=true
       - APP_ENV=local
       - APP_KEY=${APP_KEY}
       - APP_DEBUG=true

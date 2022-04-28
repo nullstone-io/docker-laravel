@@ -10,9 +10,16 @@ VOLUME /app/public
 
 COPY etc/ /etc/
 
-# Copy in entrypoints
-COPY docker-entrypoint.d/ /docker-entrypoint.d/
+# Set up root entrypoint
+WORKDIR /
+COPY docker-entrypoint.sh .
+RUN chmod +x docker-entrypoint.sh
+
+# Set up entrypoints dir
+WORKDIR /docker-entrypoint.d/
+COPY ./docker-entrypoint.d/*.sh .
 RUN chmod +x /docker-entrypoint.d/*.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # Configure Laravel
 ONBUILD WORKDIR /app

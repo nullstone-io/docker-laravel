@@ -11,6 +11,12 @@ This image is configured with:
 - The resulting image is small (~37mb).
 - Preconfigured to attach [nginx](https://www.nginx.com/) sidecar container. See below.
 
+## Local Development
+
+When developing locally, it's common to add/update/remove packages to your application.
+With the `INSTALL_PACKAGES_ON_BOOT=true` env var set, restart your docker container to update packages. 
+They will be installed upon boot of the docker container.
+
 ## Nginx sidecar
 
 This image is configured to easily connect a sidecar container running nginx.
