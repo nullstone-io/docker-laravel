@@ -2,10 +2,9 @@
 
 set -e
 
-# Install packages on boot if set (usually used for local development)
-if [ -n "${INSTALL_PACKAGES_ON_BOOT}" ]; then
-  echo "Installing packages..."
-  composer install --no-dev
+# Set laravel APP_ENV to NULLSTONE_ENV if set
+if [ -n "${NULLSTONE_ENV}" ]; then
+  export APP_ENV="${NULLSTONE_ENV}"
 fi
 
 # Configure DATABASE_URL if POSTGRES_URL is set
@@ -22,11 +21,6 @@ if [ -n "${MYSQL_URL}" ]; then
   export DB_CONNECTION=mysql
   echo "Configuring DATABASE_URL using MYSQL_URL"
   export DATABASE_URL="${MYSQL_URL}"
-fi
-
-# Set laravel APP_ENV to NULLSTONE_ENV if set
-if [ -n "${NULLSTONE_ENV}" ]; then
-  export APP_ENV="${NULLSTONE_ENV}"
 fi
 
 exec "$@"

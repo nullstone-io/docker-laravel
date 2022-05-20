@@ -1,15 +1,34 @@
 # nullstone/laravel
 
-Laravel Base Image that is optimized for production and configured to operate locally the same way.
+Laravel Base Image that is configured with different image tags for local and production.
 This image is very opinionated; however, not restrictive.
 
-This image is configured with:
+## Quick Reference
+
+- Maintained by
+  [Nullstone](https://nullstone.io)
+- Where to get help
+  [Nullstone Slack](https://join.slack.com/t/nullstone-community/signup)
+
+## Supported Tags and respective `Dockerfile` links
+
+- [local](local.Dockerfile)
+- [latest](Dockerfile)
+
+## Production
+
+The production image is configured with:
 - Server optimized for [php-fpm](https://php-fpm.org/).
-- Static assets and files are automatically added using `ONBUILD` during your docker build process.
-- When making code changes, no need to rebuild/restart your container.
 - Logs are emitted to stdout/stderr.
 - The resulting image is small (~37mb).
 - Preconfigured to attach [nginx](https://www.nginx.com/) sidecar container. See below.
+
+## Local Image
+
+The local image is configured with:
+- Server is run with `php artisan serve`
+- Hot-reloading and debugging is enabled
+- Logs are emitted to stdout/stderr
 
 ## Automatic Env Variables
 
@@ -21,8 +40,8 @@ On boot, this docker image automatically configures several environment variable
 ## Local Development
 
 When developing locally, it's common to add/update/remove packages to your application.
-With the `INSTALL_PACKAGES_ON_BOOT=true` env var set, restart your docker container to update packages. 
-They will be installed upon boot of the docker container.
+After updating your dependencies, restart your docker container.
+On boot, the dependencies will be installed with `composer install`.
 
 ## Nginx sidecar
 
@@ -43,17 +62,16 @@ services:
     ...
     environment:
       ...
-      - DB_CONNECTION=pgsql
-      - DATABASE_URL=postgres://acme:acme@db:5432/acme
+      - MYSQL_URL=mysql://acme:acme@db:3306/acme
   ...
   db:
-    image: postgres
+    image: mysql
     ports:
-      - 5432:5432
+      - "3306:3306"
     environment:
-      - POSTGRES_USER=acme
-      - POSTGRES_PASSWORD=acme
-      - POSTGRES_DB=acme
+      - MYSQL_USER=acme
+      - MYSQL_PASSWORD=acme
+      - MYSQL_DATABASE=acme
 ```
 
 

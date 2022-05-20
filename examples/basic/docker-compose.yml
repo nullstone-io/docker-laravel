@@ -1,34 +1,17 @@
 version: "3.8"
 
 services:
-  nginx:
-    image: nginx:stable-alpine
-    volumes:
-      - app-public:/app/public
-      - nginx-confd:/etc/nginx/conf.d
-      - nginx-templates:/etc/nginx/templates:ro
-    ports:
-      - "3000:80"
-    environment:
-      - WEBAPP_ADDR=app:9000
-    depends_on:
-      - app
-
   app:
-    build: .
-    command: php-fpm8
+    image: nullstone/laravel:local
     volumes:
-      - vendor:/app/vendor
       - .:/app
-      - app-public:/app/public
-      - nginx-confd:/etc/nginx/conf.d
-      - nginx-templates:/etc/nginx/templates
+      - vendor:/app/vendor
+    ports:
+      - "9000:9000"
     environment:
-      - INSTALL_PACKAGES_ON_BOOT=true
       - NULLSTONE_ENV=local
       - APP_KEY=${APP_KEY}
-      - APP_DEBUG=true
-      - DATABASE_URL=mysql://acme:acme@db:3306/acme
+      - MYSQL_URL=mysql://acme:acme@db:3306/acme
     depends_on:
       - db
 
@@ -43,7 +26,4 @@ services:
       MYSQL_PASSWORD: acme
 
 volumes:
-  vendor:
-  app-public:
-  nginx-confd:
-  nginx-templates:
+  vendor: {}

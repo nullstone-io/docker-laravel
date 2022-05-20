@@ -4,22 +4,19 @@ RUN apk --update add composer \
   php8-fpm php8-session php8-openssl php8-tokenizer php8-dom php8-fileinfo \
   php8-pgsql php-mysqli
 
-VOLUME /etc/nginx/conf.d
-VOLUME /etc/nginx/templates
-VOLUME /app/public
-
-COPY etc/ /etc/
-
 # Set up root entrypoint
 WORKDIR /
-COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+COPY local.entrypoint.sh .
+RUN chmod +x local.entrypoint.sh
+ENTRYPOINT ["/local.entrypoint.sh"]
 
 # Configure Laravel
 WORKDIR /app
 EXPOSE 9000
-ENV APP_DEBUG false
+ENV SERVER_HOST 0.0.0.0
+ENV SERVER_PORT 9000
+ENV APP_DEBUG true
+ENV APP_ENV local
 ENV LOG_CHANNEL stderr
 
-CMD ["php-fpm8"]
+CMD ["php", "artisan", "serve"]
