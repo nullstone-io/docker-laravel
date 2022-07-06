@@ -1,9 +1,10 @@
-ARG PHP_VERSION=8.1
-FROM php:${PHP_VERSION}-alpine
+ARG BUILD_PHP_VERSION=8.1
+FROM php:${BUILD_PHP_VERSION}-alpine
 
 RUN apk --update add composer \
-  php8-fpm php8-session php8-openssl php8-tokenizer php8-dom php8-fileinfo \
-  php8-pgsql php-mysqli
+  php${BUILD_PHP_VERSION}-fpm php${BUILD_PHP_VERSION}-session php${BUILD_PHP_VERSION}-openssl \
+  php${BUILD_PHP_VERSION}-tokenizer php${BUILD_PHP_VERSION}-dom php${BUILD_PHP_VERSION}-fileinfo \
+  php${BUILD_PHP_VERSION}-pgsql php-mysqli
 
 VOLUME /etc/nginx/conf.d
 VOLUME /etc/nginx/templates
