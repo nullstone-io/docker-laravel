@@ -1,4 +1,5 @@
-FROM php:8-alpine
+ARG PHP_VERSION=8.1
+FROM php:${PHP_VERSION}-alpine
 
 RUN apk --update add composer \
   php8-fpm php8-session php8-openssl php8-tokenizer php8-dom php8-fileinfo \
