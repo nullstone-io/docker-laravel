@@ -1,10 +1,9 @@
-ARG BUILD_PHP_VERSION=8.1
-FROM php:${BUILD_PHP_VERSION}-alpine
+FROM php:8.1-fpm-alpine
 
 RUN apk --update add \
-  php${BUILD_PHP_VERSION}-fpm php${BUILD_PHP_VERSION}-session php${BUILD_PHP_VERSION}-openssl \
-  php${BUILD_PHP_VERSION}-tokenizer php${BUILD_PHP_VERSION}-dom php${BUILD_PHP_VERSION}-fileinfo \
-  php${BUILD_PHP_VERSION}-pgsql php-mysqli
+  php81-session php81-openssl \
+  php81-tokenizer php81-dom php81-fileinfo \
+  php81-pgsql php-mysqli
 
 # Install composer
 WORKDIR /tmp/
@@ -14,19 +13,23 @@ RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/bin/composer
 
+# Set up volumes for nginx
+VOLUME /etc/nginx/conf.d
+VOLUME /etc/nginx/templates
+VOLUME /app/public
+
+COPY "php8.1/etc/" /etc/
+
 # Set up root entrypoint
 WORKDIR /
-COPY local.entrypoint.sh .
-RUN chmod +x local.entrypoint.sh
-ENTRYPOINT ["/local.entrypoint.sh"]
+COPY ../entrypoint.sh .
+RUN chmod +x entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
 # Configure Laravel
 WORKDIR /app
 EXPOSE 9000
-ENV SERVER_HOST 0.0.0.0
-ENV SERVER_PORT 9000
-ENV APP_DEBUG true
-ENV APP_ENV local
+ENV APP_DEBUG false
 ENV LOG_CHANNEL stderr
 
-CMD ["php", "artisan", "serve"]
+CMD ["/usr/local/sbin/php-fpm"]
