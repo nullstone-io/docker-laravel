@@ -12,10 +12,10 @@ This image is very opinionated; however, not restrictive.
 
 ## Supported Tags and respective `Dockerfile` links
 
-- [local,local-php8,local-php8.1](local.Dockerfile)
-- [latest,php8,php8.1](Dockerfile)
-- [local-php8.0](local.Dockerfile)
-- [php8.0](Dockerfile)
+- [latest,php8,php8.1](php8.1/Dockerfile)
+- [local,php8-local,php8.1-local](php8.1/local.Dockerfile)
+- [php8.0](php8.0/Dockerfile)
+- [php8.0-local](php8.0/local.Dockerfile)
 
 ## Production
 
