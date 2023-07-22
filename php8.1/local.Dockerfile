@@ -1,17 +1,13 @@
 FROM php:8.1-fpm-alpine
 
 RUN apk --update add \
+  nodejs npm yarn \
   php81-session php81-openssl \
   php81-tokenizer php81-dom php81-fileinfo \
   php81-pgsql php-mysqli
 
 # Install composer
-WORKDIR /tmp/
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php -r "if (hash_file('sha384', 'composer-setup.php') === 'e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-RUN php composer-setup.php
-RUN php -r "unlink('composer-setup.php');"
-RUN mv composer.phar /usr/bin/composer
+RUN curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
 # Set up root entrypoint
 WORKDIR /
